@@ -1,0 +1,195 @@
+---
+title: "Brazilian Companies"
+format: html
+toc: true
+code-fold: true
+theme:
+    dark: darkly
+    light: flatly
+---
+
+```{python}
+
+#| include: false
+#| 
+import pandas as pd
+pd.plotting.register_matplotlib_converters()
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+print("Setup Complete")
+```
+
+
+```{python}
+#| include: false
+#| 
+import pydytuesday
+import os
+
+DATE = "2026-01-27"
+DOWNLOAD_FOLDER = "data/"
+
+# create data folder if it doesnt already
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+
+# this is the main project directory
+original_dir = os.getcwd()
+
+try:
+    # change dir to the download folder
+    os.chdir(DOWNLOAD_FOLDER)
+
+    # no pydytuesday will download the data to the current folder, i.e. the DOWLOAD_FOLDER
+    pydytuesday.get_date(DATE)
+    print(f"Successfully downloaded files to {DOWNLOAD_FOLDER}")
+finally:
+    # move back to the original directory
+    os.chdir(original_dir)
+```
+
+
+```{python}
+companies_data = pd.read_csv("./data/companies.csv")
+```
+
+These two piles of code do the same thing
+```{python}
+companies_data.loc[:, 'company_size'].value_counts()
+```
+
+```{python}
+companies_data.groupby('company_size')['company_id'].count()
+```
+
+
+# Today let's do the qusestions proposed by the TidyTuesdays team
+
+- [ ] Which legal nature categories concentrate the highest total and average capital stock?
+- [ ] How does company size relate to capital stock (and how skewed is it)?
+- [ ] Do specific owner qualification groups dominate high-capital companies?
+- [ ] What patterns emerge when comparing the top capital-stock tail across categories (legal nature, size, qualification)?
+
+
+# Which legal nature categories concentrate the highest total and average capital stock?
+
+
+```{python}
+legal_nature_avg_stock = (
+    companies_data
+    .groupby("legal_nature")["capital_stock"]
+    .mean()
+)
+legal_nature_total_stock = (
+    companies_data
+    .groupby("legal_nature")["capital_stock"]
+    .sum()
+)
+
+```
+
+```{python}
+
+plt.figure(figsize=(10, 8))
+
+# ive seen people use a generic name like plot_data
+# in their cells where they're just plotting a graph based on
+# dataframes/series in pandas
+# they're propbably creating a new variable so that they can mess around with it
+# without breaking the original 'sources of truth' (variables)
+plot_data = legal_nature_avg_stock.sort_values(ascending=False)
+
+# sns.barplot(data=legal_nature_avg_stock)
+avg_stock_plot = sns.barplot(
+    x=plot_data.values,
+    y=plot_data.index,
+    palette="viridis",  # pretty gradient
+)
+
+plt.xscale("log")
+
+for i, v in enumerate(plot_data.values):
+    # so, apparently, in python you can just put underscores to make numbers more readable
+    # very cool very nice
+    label = f"${v / 1_000_000:.0f}M" if v > 1_000_000 else f"${v / 1_000:.0f}K"
+
+    # Place text slightly to the right of the bar end
+    avg_stock_plot.text(
+        x=v,  # since v is the value/length of the bar, this will put text at the tip of the bar
+        y=i,  # in a barplot, the bars are the fixed coordinates (integer row)
+        s=" " + label,  # the str of what to show; the label + left margin of one space
+        verticalalignment="center",  # the middle of the text sits on the y-line
+        fontweight="bold",
+    )
+
+plt.xlabel("Capital Stock (log scale)")
+plt.ylabel("")
+plt.title("Average Capital Stock by Legal Nature")
+
+# plt.tight_layout()
+plt.show()
+```
+
+From this chart we can see that Publicly Traded Corporations make by far the most amount of money on average, with 
+
+## distributions within some of those categories (e.g. LLC)
+- make dist graph for Publicly Traded Companies, then for LLCs
+- plot vertical lines where the mean and median are
+- try to put both graphs on the same page (figure)
+
+
+```{python}
+publicly_traded = companies_data.loc[
+    companies_data["legal_nature"] == "Publicly Traded Corporation", :
+]
+```
+
+```{python}
+sns.histplot(data=publicly_traded, x="capital_stock", log_scale=True, bins=30)
+plt.title("Distribution of Capital Stoc for Publicly Traded Corporations")
+plt.xlabel("Capital Stock (Log Scale)")
+plt.ylabel("Number of Companies")
+plt.show()
+```
+```{python}
+sns.kdeplot(data=publicly_traded, x="capital_stock", log_scale=True)
+plt.title("Distribution of Capital Stoc for Publicly Traded Corporations")
+plt.xlabel("Capital Stock (Log Scale)")
+plt.show()
+```
+
+## trying to plot all the kde-lines for all compnay types on one graph
+```{python}
+legal_natures = companies_data["legal_nature"].value_counts().index
+for legal_nature in legal_natures:
+    subgroup = companies_data.loc[
+        companies_data["legal_nature"] == f"{legal_nature}", :
+    ]
+    sns.kdeplot(data=subgroup, x="capital_stock", log_scale=True)
+
+plt.show()
+```
+this is a pretty bad way to make this kinda plot. i was basically brute-forced and has no legend
+
+
+```{python}
+
+plt.figure(figsize=(6,8))
+
+neon_spaghetti = sns.kdeplot(
+    data=companies_data,
+    x='capital_stock',
+    hue='legal_nature',
+    log_scale=True,
+    common_norm=False # in my first graph, normalization made the area under each line to be 1
+                      # seaborn's normalization makes it so that the combined area under all lines is 1
+                      # which makes my graph even more unreadable than it already was
+)
+
+sns.move_legend(
+    neon_spaghetti,
+    loc='upper left',
+    bbox_to_anchor=(1.05,1)
+)
+plt.show()
+```
