@@ -248,6 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#which-legal-nature-categories-concentrate-the-highest-total-and-average-capital-stock" id="toc-which-legal-nature-categories-concentrate-the-highest-total-and-average-capital-stock" class="nav-link" data-scroll-target="#which-legal-nature-categories-concentrate-the-highest-total-and-average-capital-stock">Which legal nature categories concentrate the highest total and average capital stock?</a>
   <ul class="collapse">
   <li><a href="#distributions-within-some-of-those-categories-e.g.-llc" id="toc-distributions-within-some-of-those-categories-e.g.-llc" class="nav-link" data-scroll-target="#distributions-within-some-of-those-categories-e.g.-llc">distributions within some of those categories (e.g.&nbsp;LLC)</a></li>
+  <li><a href="#trying-to-plot-all-the-kde-lines-for-all-compnay-types-on-one-graph" id="toc-trying-to-plot-all-the-kde-lines-for-all-compnay-types-on-one-graph" class="nav-link" data-scroll-target="#trying-to-plot-all-the-kde-lines-for-all-compnay-types-on-one-graph">trying to plot all the kde-lines for all compnay types on one graph</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -274,19 +275,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="9e738dbd" class="cell" data-execution_count="3">
+<div id="f7ade67b" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>companies_data <span class="op">=</span> pd.read_csv(<span class="st">"./data/companies.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>These two piles of code do the same thing</p>
-<div id="69139280" class="cell" data-execution_count="4">
+<div id="6422b2a0" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>companies_data.loc[:, <span class="st">'company_size'</span>].value_counts()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>company_size
 micro-enterprise    66202
 other               42520
@@ -294,12 +295,12 @@ small-enterprise    32610
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="0a80ab0e" class="cell" data-execution_count="5">
+<div id="f8c05760" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>companies_data.groupby(<span class="st">'company_size'</span>)[<span class="st">'company_id'</span>].count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>company_size
 micro-enterprise    66202
 other               42520
@@ -318,7 +319,7 @@ Name: company_id, dtype: int64</code></pre>
 </section>
 <section id="which-legal-nature-categories-concentrate-the-highest-total-and-average-capital-stock" class="level1">
 <h1>Which legal nature categories concentrate the highest total and average capital stock?</h1>
-<div id="b61371ef" class="cell" data-execution_count="6">
+<div id="ab5abd27" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>legal_nature_avg_stock <span class="op">=</span> (</span>
@@ -333,13 +334,13 @@ Name: company_id, dtype: int64</code></pre>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="051446b6" class="cell" data-fig-height="10" data-execution_count="7">
+<div id="3ab25a9b" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ive seen people use a generic name like plot_data</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># in their cells where they're just plotting a graph based on </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># in their cells where they're just plotting a graph based on</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># dataframes/series in pandas</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># they're propbably creating a new variable so that they can mess around with it</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># without breaking the original 'sources of truth' (variables)</span></span>
@@ -354,7 +355,7 @@ Name: company_id, dtype: int64</code></pre>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.xscale(<span class="st">"log"</span>)</span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, v <span class="kw">in</span> <span class="bu">enumerate</span>(legal_nature_avg_stock.values):</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, v <span class="kw">in</span> <span class="bu">enumerate</span>(plot_data.values):</span>
 <span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># so, apparently, in python you can just put underscores to make numbers more readable</span></span>
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># very cool very nice</span></span>
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> <span class="ss">f"$</span><span class="sc">{</span>v <span class="op">/</span> <span class="dv">1_000_000</span><span class="sc">:.0f}</span><span class="ss">M"</span> <span class="cf">if</span> v <span class="op">&gt;</span> <span class="dv">1_000_000</span> <span class="cf">else</span> <span class="ss">f"$</span><span class="sc">{</span>v <span class="op">/</span> <span class="dv">1_000</span><span class="sc">:.0f}</span><span class="ss">K"</span></span>
@@ -372,11 +373,11 @@ Name: company_id, dtype: int64</code></pre>
 <span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">""</span>)</span>
 <span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Average Capital Stock by Legal Nature"</span>)</span>
 <span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.tight_layout()</span></span>
 <span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\DanIs\AppData\Local\Temp\ipykernel_35548\551034253.py:11: FutureWarning: 
+<pre><code>C:\Users\DanIs\AppData\Local\Temp\ipykernel_4072\342162817.py:11: FutureWarning: 
 
 Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
 
@@ -385,7 +386,7 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-8-output-2.png" width="955" height="756" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-8-output-2.png" width="1119" height="672" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -398,6 +399,115 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
 <li>plot vertical lines where the mean and median are</li>
 <li>try to put both graphs on the same page (figure)</li>
 </ul>
+<div id="96f70b3c" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>publicly_traded <span class="op">=</span> companies_data.loc[</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    companies_data[<span class="st">"legal_nature"</span>] <span class="op">==</span> <span class="st">"Publicly Traded Corporation"</span>, :</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="e81e5e0a" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sns.histplot(data<span class="op">=</span>publicly_traded, x<span class="op">=</span><span class="st">"capital_stock"</span>, log_scale<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution of Capital Stoc for Publicly Traded Corporations"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Capital Stock (Log Scale)"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Number of Companies"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-1.png" width="576" height="451" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="169c3573" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data<span class="op">=</span>publicly_traded, x<span class="op">=</span><span class="st">"capital_stock"</span>, log_scale<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution of Capital Stoc for Publicly Traded Corporations"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Capital Stock (Log Scale)"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-11-output-1.png" width="598" height="451" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="trying-to-plot-all-the-kde-lines-for-all-compnay-types-on-one-graph" class="level2">
+<h2 class="anchored" data-anchor-id="trying-to-plot-all-the-kde-lines-for-all-compnay-types-on-one-graph">trying to plot all the kde-lines for all compnay types on one graph</h2>
+<div id="218a81a7" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>legal_natures <span class="op">=</span> companies_data[<span class="st">"legal_nature"</span>].value_counts().index</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> legal_nature <span class="kw">in</span> legal_natures:</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    subgroup <span class="op">=</span> companies_data.loc[</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        companies_data[<span class="st">"legal_nature"</span>] <span class="op">==</span> <span class="ss">f"</span><span class="sc">{</span>legal_nature<span class="sc">}</span><span class="ss">"</span>, :</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    sns.kdeplot(data<span class="op">=</span>subgroup, x<span class="op">=</span><span class="st">"capital_stock"</span>, log_scale<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\DanIs\AppData\Local\Temp\ipykernel_4072\3393681815.py:6: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
+  sns.kdeplot(data=subgroup, x="capital_stock", log_scale=True)
+C:\Users\DanIs\AppData\Local\Temp\ipykernel_4072\3393681815.py:6: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
+  sns.kdeplot(data=subgroup, x="capital_stock", log_scale=True)
+C:\Users\DanIs\AppData\Local\Temp\ipykernel_4072\3393681815.py:6: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
+  sns.kdeplot(data=subgroup, x="capital_stock", log_scale=True)
+C:\Users\DanIs\AppData\Local\Temp\ipykernel_4072\3393681815.py:6: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
+  sns.kdeplot(data=subgroup, x="capital_stock", log_scale=True)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-12-output-2.png" width="589" height="431" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>this is a pretty bad way to make this kinda plot. i was basically brute-forced and has no legend</p>
+<div id="bb741256" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">8</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>neon_spaghetti <span class="op">=</span> sns.kdeplot(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>companies_data,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">'capital_stock'</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">'legal_nature'</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    log_scale<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    common_norm<span class="op">=</span><span class="va">False</span> <span class="co"># in my first graph, normalization made the area under each line to be 1</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># seaborn's normalization makes it so that the combined area under all lines is 1</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                      <span class="co"># which makes my graph even more unreadable than it already was</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>sns.move_legend(</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    neon_spaghetti,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    loc<span class="op">=</span><span class="st">'upper left'</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    bbox_to_anchor<span class="op">=</span>(<span class="fl">1.05</span>,<span class="dv">1</span>)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\DanIs\AppData\Local\Temp\ipykernel_4072\4049222360.py:3: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
+  neon_spaghetti = sns.kdeplot(</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-13-output-2.png" width="907" height="652" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 
